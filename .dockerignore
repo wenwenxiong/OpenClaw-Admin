@@ -1,0 +1,15 @@
+node_modules
+dist
+.git
+.github
+!.env
+.env.*
+!.env.example
+*.log
+data/*.db
+data/*.db-wal
+data/*.db-shm
+docs/images
+*.md
+!README.md
+wolai-config.yaml
