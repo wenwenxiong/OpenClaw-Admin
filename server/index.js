@@ -1256,7 +1256,8 @@ app.get('/api/terminal/stream', authMiddleware, (req, res) => {
   }
 
   try {
-    const shell = process.platform === 'win32' ? 'powershell.exe' : process.env.SHELL || '/bin/bash'
+    const defaultShell = existsSync('/bin/bash') ? '/bin/bash' : '/bin/sh'
+    const shell = process.platform === 'win32' ? 'powershell.exe' : process.env.SHELL || defaultShell
     
     const ptyProcess = pty.spawn(shell, [], {
       name: 'xterm-256color',
