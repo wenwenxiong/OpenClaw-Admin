@@ -24,6 +24,11 @@ RUN apk add --no-cache \
     g++ \
     openssh-client \
     curl \
+    xvfb \
+    x11vnc \
+    ffmpeg \
+    xdotool \
+    bash \
     && rm -rf /var/cache/apk/*
 
 ARG PIP_INDEX_URL=""
