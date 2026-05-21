@@ -1,0 +1,27 @@
+OpenClaw Admin has been deployed!
+
+{{- if eq .Values.service.type "NodePort" }}
+
+Get the application URL:
+
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} \
+    svc {{ include "openclaw-admin.fullname" . }} \
+    -o jsonpath='{.spec.ports[0].nodePort}')
+  export NODE_IP=$(kubectl get nodes \
+    -o jsonpath='{.items[0].status.addresses[0].address}')
+  echo "http://$NODE_IP:$NODE_PORT"
+
+{{- else }}
+
+  export POD_NAME=$(kubectl get pods \
+    --namespace {{ .Release.Namespace }} \
+    -l "app.kubernetes.io/instance={{ .Release.Name }}" \
+    -o jsonpath='{.items[0].metadata.name}')
+  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 3000:3000
+
+{{- end }}
+
+Verify health:
+
+  kubectl --namespace {{ .Release.Namespace }} get pods -l \
+    "app.kubernetes.io/instance={{ .Release.Name }}"

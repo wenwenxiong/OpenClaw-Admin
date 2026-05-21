@@ -1,0 +1,70 @@
+replicaCount: 1
+
+image:
+  repository: docker.io/xiongwen/openclaw-admin
+  tag: 2026.5.20
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 3000
+  nodePort: 30800
+
+env:
+  config:
+    VITE_APP_TITLE: "OpenClaw-Admin"
+    OPENCLAW_WS_URL: "ws://openclaw-svc:18789"
+    PORT: "3000"
+    LOG_LEVEL: "INFO"
+    AUTH_USERNAME: "admin"
+    HERMES_WEB_URL: "http://hermes-svc:9119"
+    HERMES_API_URL: "http://hermes-svc:8642"
+    VITE_TTS_ENABLED: "true"
+    VITE_TTS_AUTO_PLAY: "false"
+    VITE_TTS_VOICE: "zh-CN"
+    VITE_TTS_RATE: "1.0"
+    VITE_TTS_VOLUME: "1.0"
+    VITE_TTS_PITCH: "1.0"
+  secrets:
+    OPENCLAW_AUTH_TOKEN: "sometoken-register-here"
+    OPENCLAW_AUTH_PASSWORD: ""
+    AUTH_PASSWORD: "xwwMecdev_2020"
+    HERMES_API_KEY: "sk-local"
+
+persistence:
+  enabled: true
+  storageClassName: topolvm-provisioner-thin
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+livenessProbe:
+  httpGet:
+    path: /api/auth/config
+    port: 3000
+  initialDelaySeconds: 15
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /api/auth/config
+    port: 3000
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+resources: 
+  requests:
+    cpu: 200m
+    memory: 500Mi
+  limits:
+    cpu: 2
+    memory: 4Gi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
