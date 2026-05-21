@@ -412,13 +412,12 @@ function updateEnvVar(key, value) {
 
 // 初始化配置（从环境变量和 .env 文件）
 export function initHermesConfig(envConfig) {
-  // 优先从 .env 文件读取
   const envFile = readEnvFile()
-  
-  hermesConfig.webUrl = envFile.HERMES_WEB_URL || envConfig.HERMES_WEB_URL || 'http://localhost:9119'
-  hermesConfig.apiUrl = envFile.HERMES_API_URL || envConfig.HERMES_API_URL || 'http://localhost:8642'
-  hermesConfig.apiKey = envFile.HERMES_API_KEY || envConfig.HERMES_API_KEY || ''
-  hermesConfig.autoStartDashboard = envFile.HERMES_AUTO_START_DASHBOARD === 'true'
+
+  hermesConfig.webUrl = process.env.HERMES_WEB_URL || envFile.HERMES_WEB_URL || envConfig.HERMES_WEB_URL || 'http://localhost:9119'
+  hermesConfig.apiUrl = process.env.HERMES_API_URL || envFile.HERMES_API_URL || envConfig.HERMES_API_URL || 'http://localhost:8642'
+  hermesConfig.apiKey = process.env.HERMES_API_KEY || envFile.HERMES_API_KEY || envConfig.HERMES_API_KEY || ''
+  hermesConfig.autoStartDashboard = (process.env.HERMES_AUTO_START_DASHBOARD || envFile.HERMES_AUTO_START_DASHBOARD) === 'true'
   console.log(`[Hermes] Proxy initialized: web=${hermesConfig.webUrl}, api=${hermesConfig.apiUrl}, hasApiKey=${!!hermesConfig.apiKey}, autoStart=${hermesConfig.autoStartDashboard}`)
   
   // 如果设置了自动启动，则启动 Dashboard

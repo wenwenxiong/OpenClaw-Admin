@@ -7,3 +7,4 @@ backups
 data/wizard.db-shm
 data/wizard.db-wal
 .trae
+src/**/*.vue.js

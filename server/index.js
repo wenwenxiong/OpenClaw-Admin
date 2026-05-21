@@ -21,41 +21,26 @@ const __dirname = dirname(__filename)
 const envPath = join(__dirname, '../.env')
 
 function loadEnvConfig() {
-  if (!existsSync(envPath)) {
-    return {
-      PORT: 3001,
-      OPENCLAW_WS_URL: 'ws://localhost:18789',
-      OPENCLAW_AUTH_TOKEN: '',
-      OPENCLAW_AUTH_PASSWORD: '',
-      DEV_FRONTEND_URL: 'http://localhost:3000',
-      AUTH_USERNAME: '',
-      AUTH_PASSWORD: '',
-      MEDIA_DIR: '',
-      LOG_LEVEL: 'INFO',
-      HERMES_WEB_URL: '',
-      HERMES_API_URL: '',
-      HERMES_API_KEY: '',
-      HERMES_CLI_PATH: '',
-      HERMES_HOME: '',
-    }
+  let parsed = {}
+  if (existsSync(envPath)) {
+    const content = readFileSync(envPath, 'utf-8')
+    parsed = parse(content)
   }
-  const content = readFileSync(envPath, 'utf-8')
-  const parsed = parse(content)
   return {
-    PORT: parsed.PORT || 3001,
-    OPENCLAW_WS_URL: parsed.OPENCLAW_WS_URL || 'ws://localhost:18789',
-    OPENCLAW_AUTH_TOKEN: parsed.OPENCLAW_AUTH_TOKEN || '',
-    OPENCLAW_AUTH_PASSWORD: parsed.OPENCLAW_AUTH_PASSWORD || '',
-    DEV_FRONTEND_URL: parsed.DEV_FRONTEND_URL || 'http://localhost:3000',
-    AUTH_USERNAME: parsed.AUTH_USERNAME || '',
-    AUTH_PASSWORD: parsed.AUTH_PASSWORD || '',
-    MEDIA_DIR: parsed.MEDIA_DIR || '',
-    LOG_LEVEL: parsed.LOG_LEVEL || 'INFO',
-    HERMES_WEB_URL: parsed.HERMES_WEB_URL || '',
-    HERMES_API_URL: parsed.HERMES_API_URL || '',
-    HERMES_API_KEY: parsed.HERMES_API_KEY || '',
-    HERMES_CLI_PATH: parsed.HERMES_CLI_PATH || '',
-    HERMES_HOME: parsed.HERMES_HOME || '',
+    PORT: process.env.PORT || parsed.PORT || 3001,
+    OPENCLAW_WS_URL: process.env.OPENCLAW_WS_URL || parsed.OPENCLAW_WS_URL || 'ws://localhost:18789',
+    OPENCLAW_AUTH_TOKEN: process.env.OPENCLAW_AUTH_TOKEN || parsed.OPENCLAW_AUTH_TOKEN || '',
+    OPENCLAW_AUTH_PASSWORD: process.env.OPENCLAW_AUTH_PASSWORD || parsed.OPENCLAW_AUTH_PASSWORD || '',
+    DEV_FRONTEND_URL: process.env.DEV_FRONTEND_URL || parsed.DEV_FRONTEND_URL || 'http://localhost:3000',
+    AUTH_USERNAME: process.env.AUTH_USERNAME || parsed.AUTH_USERNAME || '',
+    AUTH_PASSWORD: process.env.AUTH_PASSWORD || parsed.AUTH_PASSWORD || '',
+    MEDIA_DIR: process.env.MEDIA_DIR || parsed.MEDIA_DIR || '',
+    LOG_LEVEL: process.env.LOG_LEVEL || parsed.LOG_LEVEL || 'INFO',
+    HERMES_WEB_URL: process.env.HERMES_WEB_URL || parsed.HERMES_WEB_URL || '',
+    HERMES_API_URL: process.env.HERMES_API_URL || parsed.HERMES_API_URL || '',
+    HERMES_API_KEY: process.env.HERMES_API_KEY || parsed.HERMES_API_KEY || '',
+    HERMES_CLI_PATH: process.env.HERMES_CLI_PATH || parsed.HERMES_CLI_PATH || '',
+    HERMES_HOME: process.env.HERMES_HOME || parsed.HERMES_HOME || '',
   }
 }
 
